@@ -1,0 +1,32 @@
+{
+    "exchanges": [
+      {
+        "name": "maker-iot-new-topic-queue",
+        "vhost": "/",
+        "type": "fanout",
+        "durable": true,
+        "auto_delete": false,
+        "internal": false,
+        "arguments": {}
+      }
+    ],
+    "queues": [
+      {
+        "name": "maker-iot-new-topic-queue",
+        "vhost": "/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {}
+      }
+    ],
+    "bindings": [
+      {
+        "source": "maker-iot-new-topic-queue",
+        "vhost": "/",
+        "destination": "maker-iot-new-topic-queue",
+        "destination_type": "queue",
+        "routing_key": "*",
+        "arguments": {}
+      }
+    ]
+  }

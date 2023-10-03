@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  rabbitmqt:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 9890:15672
+      - 8888:5672
+    hostname: stats
+    volumes:
+      - ./.volumes/rabbitmq/data:/var/lib/rabbitmq/mnesia
+      - type: bind
+        source: ./rabbitmq/rabbitmq.config
+        target: /etc/rabbitmq/rabbitmq.config
+      - type: bind
+        source: ./rabbitmq/rabbitmq-defs.json
+        target: /etc/rabbitmq/rabbitmq-defs.json
