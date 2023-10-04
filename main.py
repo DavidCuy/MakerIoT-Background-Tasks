@@ -3,7 +3,7 @@ import Environment as Environment
 
 
 def callback(ch, method, properties, body):
-        print(" [x] Received %r" % body)
+    print(" [x] Received %r" % body)
 
 
 basic_message_receiver = BasicMessageReceiver(Environment.SQS_DRIVE)
