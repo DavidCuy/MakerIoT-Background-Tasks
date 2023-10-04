@@ -1,3 +1,15 @@
-FROM rabbitmq:3.8-management-alpine
+FROM python:3.7-slim
 
-RUN rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_federation_management rabbitmq_stomp
+# set the working directory in the container
+WORKDIR /code
+
+# copy the dependencies file to the working directory
+COPY requirements.txt requirements.txt
+
+# install dependencies
+RUN pip install -r requirements.txt
+
+COPY . .
+
+ENTRYPOINT ["python", "main.py"]
+

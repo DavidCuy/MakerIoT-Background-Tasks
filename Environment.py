@@ -2,7 +2,7 @@ import os
 from typing import Any
 from dotenv import load_dotenv
 
-load_dotenv('../.env')
+load_dotenv('.env')
 
 def env(env_key: str, default_value: Any) -> Any:
     """ Parsea el valor de una variable de entorno a una variable utilizable para python

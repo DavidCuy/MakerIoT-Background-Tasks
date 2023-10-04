@@ -1,19 +1,5 @@
 version: "3.7"
 services:
-  background-services:
-    image: background-services
-    container_name: background-services
-    depends_on:
-      rabbitmqt:
-        condition: service_healthy
-    restart: always
-    env_file:
-      - ./.env
-    environment:
-      PYTHONUNBUFFERED: 1
-    build:
-      context: .
-      dockerfile: Dockerfile
   rabbitmqt:
     image: rabbitmq:3.8-management-alpine
     container_name: rabbitmq
@@ -25,6 +11,7 @@ services:
       retries: 3
     ports:
       - 9890:15672
+      - 8888:5672
     hostname: stats
     volumes:
       - ./.volumes/rabbitmq/data:/var/lib/rabbitmq/mnesia

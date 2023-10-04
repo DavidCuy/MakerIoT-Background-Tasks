@@ -1,4 +1,4 @@
-import src.Environment as env
+import Environment as env
 
 config = {
     'rabbitmq': {

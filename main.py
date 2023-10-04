@@ -1,5 +1,5 @@
 from src.rabbitmq import BasicMessageReceiver
-import src.Environment as Environment
+import Environment as Environment
 
 
 def callback(ch, method, properties, body):
