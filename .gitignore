@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 
 .volumes/*
+.services/*
+.vscode/*
+!.env.dist
