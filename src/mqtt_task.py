@@ -1,10 +1,13 @@
+import json
 import Environment
+from typing import List
 from paho.mqtt.client import Client, MQTTMessage
 from src.config.mqtt import config
 from src.data.enums import MQTT_AUTH_METHOD
 from src.data.models import DeviceConfig
 
 mqtt_conf = config[Environment.MQTT_LIB]
+subscribed_configs: List[DeviceConfig] = []
 
 def start():
     def on_connect(client: Client, userdata, flags: dict, rc: int):
@@ -26,7 +29,20 @@ def start():
             userdata ([type]): [description]
             message (MQTTMessage): Mensaje que viene a traves del topico
         """
+        try:
+            payload = json.loads(str(message.payload.decode('utf-8')))
+        except Exception as e:
+            print("Is not a valid JSON")
+            return
         print("Message from topic: {}".format(message.topic))
+        configs_input_topics = [conf.input_topic for conf in subscribed_configs]
+        selected_conf = list(filter(lambda conf: conf.input_topic in configs_input_topics, subscribed_configs))
+
+        if len(selected_conf) < 1: return
+
+        selected_conf = selected_conf[0]
+        payload.update({'modified': 'now'})
+        client.publish(selected_conf.output_topic, json.dumps(payload))
 
     client = Client()
 
@@ -45,3 +61,4 @@ def start():
 
 def subscribe_topic(client: Client, config: DeviceConfig):
     client.subscribe(config.input_topic)
+    subscribed_configs.append(config)
