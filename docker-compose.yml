@@ -37,3 +37,14 @@ services:
       - type: bind
         source: ./rabbitmq/rabbitmq-defs.json
         target: /etc/rabbitmq/rabbitmq-defs.json
+  mosquitto:
+    image: eclipse-mosquitto:2.0.14
+    hostname: mosquitto
+    volumes:
+      - ./.services/mosquitto:/mosquitto
+    expose:
+        - "8883"
+        - "9001"
+    ports:
+        - "8883:8883"
+        - "9001:9001"

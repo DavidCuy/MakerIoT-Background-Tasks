@@ -52,3 +52,15 @@ services:
       - 8081:8081
     env_file:
       - ./.services/mongo-express/.env
+  
+  mosquitto:
+    image: eclipse-mosquitto:2.0.14
+    hostname: mosquitto
+    volumes:
+      - ./.services/mosquitto:/mosquitto
+    expose:
+        - "8883"
+        - "9001"
+    ports:
+        - "8883:8883"
+        - "9001:9001"

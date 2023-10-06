@@ -34,11 +34,18 @@ MONGODB_URL             = f"mongodb://{MONGODB_USER}:{MONGODB_PASS}@{MONGODB_HOS
 
 SQS_DRIVE               = env("SQS_DRIVER", "rabbitmq")
 
-RABBITMQ_USER            = env("RABBITMQ_USER", "root")
-RABBITMQ_PASS            = env("RABBITMQ_PASS", "example")
-RABBITMQ_HOST            = env("RABBITMQ_HOST", "localhost")
-RABBITMQ_PORT            = env("RABBITMQ_PORT", 5672)
-RABBITMQ_SSL             = env("RABBITMQT_SSL", False)
-RABBITMQ_URL             = f"{'amqps' if RABBITMQ_SSL else 'amqp'}://{RABBITMQ_USER}:{RABBITMQ_PASS}@{RABBITMQ_HOST}:{RABBITMQ_PORT}"
+RABBITMQ_USER           = env("RABBITMQ_USER", "root")
+RABBITMQ_PASS           = env("RABBITMQ_PASS", "example")
+RABBITMQ_HOST           = env("RABBITMQ_HOST", "localhost")
+RABBITMQ_PORT           = env("RABBITMQ_PORT", 5672)
+RABBITMQ_SSL            = env("RABBITMQT_SSL", False)
+RABBITMQ_URL            = f"{'amqps' if RABBITMQ_SSL else 'amqp'}://{RABBITMQ_USER}:{RABBITMQ_PASS}@{RABBITMQ_HOST}:{RABBITMQ_PORT}"
+
+MQTT_LIB                = env("MQTT_LIB", "paho-mqtt")
+MQTT_HOST               = env("MQTT_HOST", "localhost")
+MQTT_PORT               = env("MQTT_PORT", 1883)
+MQTT_USER               = env("MQTT_USER", 1883)
+MQTT_PASS               = env("MQTT_PASS", 1883)
+MQTT_AUTH_METHOD        = env("MQTT_AUTH_METHOD", None)
 
 RABBITMQ_DEFAULT_TOPIC   = env('RABBITMQ_DEFAULT_TOPIC', 'default-topic')
