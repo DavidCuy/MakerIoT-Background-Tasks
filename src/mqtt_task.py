@@ -1,13 +1,17 @@
 import json
 import Environment
-from typing import List
+import traceback
+from typing import List, Dict
 from paho.mqtt.client import Client, MQTTMessage
+from mathjspy import MathJS
 from src.config.mqtt import config
 from src.data.enums import MQTT_AUTH_METHOD
 from src.data.models import DeviceConfig
 
 mqtt_conf = config[Environment.MQTT_LIB]
 subscribed_configs: List[DeviceConfig] = []
+
+math_js = MathJS()
 
 def start():
     def on_connect(client: Client, userdata, flags: dict, rc: int):
@@ -41,8 +45,20 @@ def start():
         if len(selected_conf) < 1: return
 
         selected_conf = selected_conf[0]
-        payload.update({'modified': 'now'})
-        client.publish(selected_conf.output_topic, json.dumps(payload))
+        output_conf: Dict = selected_conf.to_dict()['output_json']
+
+        output_payload = {}
+
+        key = ""
+        try:
+            for key in output_conf.keys():
+                math_js.update(payload)
+                output_payload[key] = math_js.eval(output_conf[key])
+
+            client.publish(selected_conf.output_topic, json.dumps(output_payload))
+        except Exception as e:
+            print(f"Ocurrio un error con el contenido de las llaves [{key}]")
+            traceback.print_exc()
 
     client = Client()
 
