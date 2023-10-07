@@ -9,7 +9,7 @@ from src.data.enums import MQTT_AUTH_METHOD
 from src.data.models import DeviceConfig
 
 mqtt_conf = config[Environment.MQTT_LIB]
-subscribed_configs: List[DeviceConfig] = []
+subscribed_configs: Dict[str, DeviceConfig] = {}
 
 math_js = MathJS()
 
@@ -39,8 +39,8 @@ def start():
             print("Is not a valid JSON")
             return
         print("Message from topic: {}".format(message.topic))
-        configs_input_topics = [conf.input_topic for conf in subscribed_configs]
-        selected_conf = list(filter(lambda conf: conf.input_topic in configs_input_topics, subscribed_configs))
+        configs_input_topics = [conf.input_topic for conf in subscribed_configs.values()]
+        selected_conf = list(filter(lambda conf: conf.input_topic in configs_input_topics, subscribed_configs.values()))
 
         if len(selected_conf) < 1: return
 
@@ -56,9 +56,14 @@ def start():
                 output_payload[key] = math_js.eval(output_conf[key])
 
             client.publish(selected_conf.output_topic, json.dumps(output_payload))
+
         except Exception as e:
             print(f"Ocurrio un error con el contenido de las llaves [{key}]")
             traceback.print_exc()
+            return
+        
+        if selected_conf.save_output:
+            print("Save in mongo timeseries")
 
     client = Client()
 
@@ -77,4 +82,4 @@ def start():
 
 def subscribe_topic(client: Client, config: DeviceConfig):
     client.subscribe(config.input_topic)
-    subscribed_configs.append(config)
+    subscribed_configs.update({str(config.to_dict()['_id']): config})
