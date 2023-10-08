@@ -2,11 +2,13 @@ import json
 import Environment
 import traceback
 from typing import List, Dict
+from datetime import datetime
 from paho.mqtt.client import Client, MQTTMessage
 from mathjspy import MathJS
 from src.config.mqtt import config
 from src.data.enums import MQTT_AUTH_METHOD
 from src.data.models import DeviceConfig
+from src.database.MongoDBConnection import get_collection, get_db
 
 mqtt_conf = config[Environment.MQTT_LIB]
 subscribed_configs: Dict[str, DeviceConfig] = {}
@@ -53,7 +55,7 @@ def start():
         try:
             for key in output_conf.keys():
                 math_js.update(payload)
-                output_payload[key] = math_js.eval(output_conf[key])
+                output_payload[key] = round(math_js.eval(output_conf[key]), 4)
 
             client.publish(selected_conf.output_topic, json.dumps(output_payload))
 
@@ -63,7 +65,16 @@ def start():
             return
         
         if selected_conf.save_output:
-            print("Save in mongo timeseries")
+            if Environment.COLLECTION_SENSORS_NAME in get_db(Environment.MONGODB_DB).list_collection_names():
+                sensors_collection = get_collection(Environment.MONGODB_DB, Environment.COLLECTION_SENSORS_NAME)
+                sorted_payload = dict(sorted(output_payload.items()))
+                sensors_collection.insert_one({
+                    "metadata": {
+                        "deviceId": selected_conf.device_id
+                    },
+                    "timestamp": datetime.now(),
+                    **sorted_payload
+                })
 
     client = Client()
 

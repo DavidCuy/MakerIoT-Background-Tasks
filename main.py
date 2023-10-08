@@ -2,11 +2,19 @@ import Environment as Environment
 import src.callbacks as callbacks
 
 from src.rabbitmq import BasicMessageReceiver
-from src.services import DeviceConfigService
+from src.database.MongoDBConnection import get_db
 
+db = get_db(Environment.MONGODB_DB)
 
-
-service = DeviceConfigService()
+if Environment.COLLECTION_SENSORS_NAME not in db.list_collection_names():
+    print(f"Creating {Environment.COLLECTION_SENSORS_NAME} collection")
+    db.create_collection(Environment.COLLECTION_SENSORS_NAME,
+                         expireAfterSeconds=604800,
+                         timeseries={
+                                'timeField': "timestamp",
+                                'metaField': "metadata",
+                                'granularity': "minutes"
+                            })
 
 basic_message_receiver = BasicMessageReceiver(Environment.SQS_DRIVE)
 

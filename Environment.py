@@ -30,7 +30,7 @@ MONGODB_PASS            = env("MONGODB_PASS", "example")
 MONGODB_DB              = env("MONGODB_DB", "local")
 MONGODB_HOST            = env("MONGODB_HOST", "mongo")
 MONGODB_PORT            = env("MONGODB_PORT", 27017)
-MONGODB_URL             = f"mongodb://{MONGODB_USER}:{MONGODB_PASS}@{MONGODB_HOST}:27017/{MONGODB_DB}"
+MONGODB_URL             = f"mongodb://{MONGODB_USER}:{MONGODB_PASS}@{MONGODB_HOST}:27017/"
 
 SQS_DRIVE               = env("SQS_DRIVER", "rabbitmq")
 
@@ -47,5 +47,7 @@ MQTT_PORT               = env("MQTT_PORT", 1883)
 MQTT_USER               = env("MQTT_USER", 1883)
 MQTT_PASS               = env("MQTT_PASS", 1883)
 MQTT_AUTH_METHOD        = env("MQTT_AUTH_METHOD", None)
+COLLECTION_SENSORS_NAME = env("COLLECTION_SENSORS_NAME", 'sensors_data')
+
 
 RABBITMQ_DEFAULT_TOPIC   = env('RABBITMQ_DEFAULT_TOPIC', 'default-topic')
