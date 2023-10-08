@@ -37,6 +37,35 @@ services:
       - type: bind
         source: ./rabbitmq/rabbitmq-defs.json
         target: /etc/rabbitmq/rabbitmq-defs.json
+  mongo-local:
+    image: mongo:7.0.1
+    container_name: mongo-local
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongo-local:27017/local --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 7
+      start_period: 50s
+    env_file:
+      - ./.services/mongo/.env
+    volumes: 
+      - './.volumes/mongo:/data/db'
+    ports:
+      - 27017:27017
+  
+  mongo-express:
+    image: mongo-express:1.0.0-alpha
+    container_name: mongo-express
+    depends_on:
+      mongo-local:
+        condition: service_healthy
+    restart: always
+    ports:
+      - 8081:8081
+    env_file:
+      - ./.services/mongo-express/.env
+  
   mosquitto:
     image: eclipse-mosquitto:2.0.14
     hostname: mosquitto
