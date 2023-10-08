@@ -48,8 +48,8 @@ def filter_configs():
             subscribed_configs.update({str(d_conf.to_dict()['_id']): d_conf})
 
 
-def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)    
+def callback(ch, method, properties, body: bytes):
+    print(f" [x] Received from {method.routing_key}: {body}")
     filter_configs()
 
 

@@ -6,7 +6,6 @@ class BasicPikaClient:
     def __init__(self, driver='rabbitmq'):
         queue_config = config[driver]
         parameters = pika.URLParameters(queue_config['url'])
-        print(queue_config['url'])
 
         self.connection = pika.BlockingConnection(parameters)
         self.channel = self.connection.channel()

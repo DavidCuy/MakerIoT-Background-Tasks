@@ -8,11 +8,27 @@
         "auto_delete": false,
         "internal": false,
         "arguments": {}
+      },
+      {
+        "name": "maker-iot-system-task-queue",
+        "vhost": "/",
+        "type": "fanout",
+        "durable": true,
+        "auto_delete": false,
+        "internal": false,
+        "arguments": {}
       }
     ],
     "queues": [
       {
         "name": "maker-iot-new-topic-queue",
+        "vhost": "/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {}
+      },
+      {
+        "name": "maker-iot-system-task-queue",
         "vhost": "/",
         "durable": true,
         "auto_delete": false,
@@ -24,6 +40,14 @@
         "source": "maker-iot-new-topic-queue",
         "vhost": "/",
         "destination": "maker-iot-new-topic-queue",
+        "destination_type": "queue",
+        "routing_key": "*",
+        "arguments": {}
+      },
+      {
+        "source": "maker-iot-system-task-queue",
+        "vhost": "/",
+        "destination": "maker-iot-system-task-queue",
         "destination_type": "queue",
         "routing_key": "*",
         "arguments": {}

@@ -49,5 +49,8 @@ MQTT_PASS               = env("MQTT_PASS", 1883)
 MQTT_AUTH_METHOD        = env("MQTT_AUTH_METHOD", None)
 COLLECTION_SENSORS_NAME = env("COLLECTION_SENSORS_NAME", 'sensors_data')
 
+MQTT_SYSTEM_TOPIC       = env("MQTT_SYSTEM_TOPIC", "$system/maker-iot/#")
 
-RABBITMQ_DEFAULT_TOPIC   = env('RABBITMQ_DEFAULT_TOPIC', 'default-topic')
+
+RABBITMQ_DEFAULT_TOPIC  = env('RABBITMQ_DEFAULT_TOPIC', 'default-topic')
+RABBITMQ_SYSTEM_QUEUE   = env('RABBITMQ_SYSTEM_QUEUE', 'system-task-queue')
