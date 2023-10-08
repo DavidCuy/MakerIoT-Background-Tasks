@@ -4,7 +4,7 @@ services:
     image: background-services
     container_name: background-services
     depends_on:
-      rabbitmqt:
+      rabbitmq:
         condition: service_healthy
     restart: always
     env_file:
@@ -14,7 +14,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-  rabbitmqt:
+  rabbitmq:
     image: rabbitmq:3.8-management-alpine
     container_name: rabbitmq
     restart: always
@@ -25,6 +25,8 @@ services:
       retries: 3
     ports:
       - 9890:15672
+    expose:
+      - "8888"
     hostname: stats
     volumes:
       - ./.volumes/rabbitmq/data:/var/lib/rabbitmq/mnesia
