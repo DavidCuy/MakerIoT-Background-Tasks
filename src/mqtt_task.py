@@ -1,7 +1,7 @@
 import json
 import Environment
 import traceback
-from typing import List, Dict
+from typing import Any, Dict
 from datetime import datetime
 from paho.mqtt.client import Client, MQTTMessage
 from mathjspy import MathJS
@@ -94,3 +94,8 @@ def start():
 def subscribe_topic(client: Client, config: DeviceConfig):
     client.subscribe(config.input_topic)
     subscribed_configs.update({str(config.to_dict()['_id']): config})
+
+
+def publish_message(client: Client, topic: str, payload: Dict[str, Any]):
+    client.publish(topic, json.dumps(payload))
+    print(f"Message published to {topic}")
